@@ -18,7 +18,7 @@ public class Disparo {
 	public Disparo(double x,double y,double direccion, double velocidad) {
 		this.x = x;
 		this.y = y;
-		this.direccion = direccion-Math.PI/2;
+		this.direccion = direccion;
 		this.velocidad = velocidad;
 		this.image = Herramientas.cargarImagen("fireball.gif");
 		this.enPantalla=true;

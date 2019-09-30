@@ -12,20 +12,21 @@ public class Juego extends InterfaceJuego {
 	private Entorno entorno;
 	private Image spaceImg;
 	
-	private Ship ship;
-	private Asteroid asteroid;   // la pelota
+	private Pajaro bird;
 	private int puntaje;
 	private Disparo laser;
+	private Obstaculo tubo;
+	private Obstaculo tubo2;
 	
 	public Juego() {
-		entorno = new Entorno(this, "Asteroids", 800, 600);
+		entorno = new Entorno(this, "VeganBird", 800, 600);
 		
 		spaceImg = Herramientas.cargarImagen("space.jpg");
 		
-		ship = new Ship(entorno.ancho()/2, entorno.alto()/2);
-		asteroid = new Asteroid(400, 100);
+		bird = new Pajaro(entorno.ancho()/4, entorno.alto()/2);
 		puntaje = 0;
-
+		
+		tubo=new Obstaculo(200, 500,50,100, 1);
 		entorno.iniciar();
 	}
 
@@ -36,44 +37,24 @@ public class Juego extends InterfaceJuego {
 		
 		entorno.cambiarFont("sans", 20, Color.WHITE);
 		entorno.escribirTexto("score: " + puntaje, entorno.ancho() - 150, 30);
-		if(asteroid!=null) {
-			asteroid.dibujar(entorno);	
-			asteroid.mover();
-			asteroid.rebotar(entorno);
-		}
+		
+		tubo.mover(entorno);
+		tubo.dibujar(entorno);
 		if(laser!=null) {
 			laser.dibujar(entorno);
 			laser.mover(entorno);
 		}
 		
-		if(ship!=null) {
-			ship.dibujar(entorno);
-			ship.mover(entorno);
+		if(bird!=null) {
+			bird.dibujar(entorno);
+			bird.mover(entorno);
 			
-			if (entorno.estaPresionada('a')) {
-				ship.girarAntihorario();
-			}
-			
-			if (entorno.estaPresionada('d')) {
-				ship.girarHorario();
-			}
 			if (entorno.sePresiono(entorno.TECLA_ESPACIO)) {
 				System.out.println("la nave dispara un rayo!");  //hacer clase disparo
-				laser=ship.disparar();
-			}
-		}
-		if(laser!=null && asteroid!=null) {
-			if(asteroid.explota(laser,entorno)) {
-				asteroid=null;
-				laser=null;
+				laser=bird.disparar();
 			}
 		}
 		
-		if(ship!=null && asteroid!=null) {
-			if(ship.explota(asteroid,entorno)) {
-				ship=null;
-			}
-		}
 		// TODO!
 		
 		
