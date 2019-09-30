@@ -7,11 +7,11 @@ import entorno.Herramientas;
 
 public class Disparo {
 	
-	double x;
-	double y;
-	double direccion;
-	double velocidad;
-	boolean enPantalla;
+	private double x;
+	private double y;
+	private double direccion;
+	private double velocidad;
+	private boolean enPantalla;
 	private Image image;
 	
 	
@@ -42,6 +42,11 @@ public class Disparo {
 			y+=velocidad*Math.sin(direccion);
 			return;
 		}
+	}
+	
+	public double[] dameDisparo() {
+		double[] a= {this.x,this.y};
+		return a;
 	}
 	
 }

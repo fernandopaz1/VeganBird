@@ -36,30 +36,46 @@ public class Juego extends InterfaceJuego {
 		
 		entorno.cambiarFont("sans", 20, Color.WHITE);
 		entorno.escribirTexto("score: " + puntaje, entorno.ancho() - 150, 30);
-		ship.dibujar(entorno);
-		asteroid.dibujar(entorno);
-		
-		asteroid.mover();
-		asteroid.rebotar(entorno);
+		if(asteroid!=null) {
+			asteroid.dibujar(entorno);	
+			asteroid.mover();
+			asteroid.rebotar(entorno);
+		}
 		if(laser!=null) {
 			laser.dibujar(entorno);
 			laser.mover(entorno);
-			//System.out.print("aa");
 		}
 		
-		if (entorno.estaPresionada('h')) {
-			ship.girarAntihorario();
+		if(ship!=null) {
+			ship.dibujar(entorno);
+			ship.mover(entorno);
+			
+			if (entorno.estaPresionada('a')) {
+				ship.girarAntihorario();
+			}
+			
+			if (entorno.estaPresionada('d')) {
+				ship.girarHorario();
+			}
+			if (entorno.sePresiono(entorno.TECLA_ESPACIO)) {
+				System.out.println("la nave dispara un rayo!");  //hacer clase disparo
+				laser=ship.disparar();
+			}
+		}
+		if(laser!=null && asteroid!=null) {
+			if(asteroid.explota(laser,entorno)) {
+				asteroid=null;
+				laser=null;
+			}
 		}
 		
-		if (entorno.estaPresionada('l')) {
-			ship.girarHorario();
+		if(ship!=null && asteroid!=null) {
+			if(ship.explota(asteroid,entorno)) {
+				ship=null;
+			}
 		}
-		
 		// TODO!
-		if (entorno.sePresiono(entorno.TECLA_ESPACIO)) {
-			System.out.println("la nave dispara un rayo!");  //hacer clase disparo
-			laser=ship.disparar();
-		}
+		
 		
 		// TODO!
 //		if (el asteroide recibe un impacto) {

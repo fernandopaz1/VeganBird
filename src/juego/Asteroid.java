@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -39,4 +40,22 @@ public class Asteroid {
 		}
 	}
 	
+	public double[] dameAsteroide() {
+		double[] a= {this.x,this.y};
+		return a;
+	}
+	
+	public double distanciaA(double[] p) {
+		double d= Math.sqrt(Math.pow(this.x-p[0], 2)+Math.pow(this.y-p[1], 2));
+		return d;
+	}
+	
+	public boolean explota(Disparo disparo, Entorno e) {
+		double distancia= this.distanciaA(disparo.dameDisparo());
+		if(distancia<=this.size/2) {
+			e.dibujarCirculo(x, y, size, Color.RED);
+			return true;
+		}
+		return false;
+	}
 }
