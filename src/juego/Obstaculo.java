@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -23,7 +24,10 @@ public class Obstaculo {
 	}
 	
 	public void dibujar(Entorno e) {
-		e.dibujarImagen(imagen, x, y, 0, 0.08);;
+		e.dibujarImagen(imagen, x, y, 0, 0.08);
+		e.dibujarImagen(imagen, x, y-400, Math.PI, 0.08);
+		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
+		e.dibujarRectangulo(x, y-400, ancho, alto, Math.PI, Color.red);
 	}
 	
 	public void mover(Entorno e) {

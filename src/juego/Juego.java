@@ -6,6 +6,8 @@ import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 public class Juego extends InterfaceJuego {
 	
@@ -15,8 +17,8 @@ public class Juego extends InterfaceJuego {
 	private Pajaro bird;
 	private int puntaje;
 	private Disparo laser;
-	private Obstaculo tubo;
-	private Obstaculo tubo2;
+	private Obstaculo[] tubo;
+	private Comida[] comida;
 	
 	public Juego() {
 		entorno = new Entorno(this, "VeganBird", 800, 600);
@@ -26,7 +28,20 @@ public class Juego extends InterfaceJuego {
 		bird = new Pajaro(entorno.ancho()/4, entorno.alto()/2);
 		puntaje = 0;
 		
-		tubo=new Obstaculo(200, 500,50,100, 1);
+		tubo=new Obstaculo[3];
+		for(int i=0;i<tubo.length;i++) {
+			int randomNum = ThreadLocalRandom.current().nextInt(entorno.alto()-100, entorno.alto());
+			tubo[i]=new Obstaculo(entorno.ancho()/3+(entorno.ancho()/3)*i, randomNum,75,225, 1);
+			}
+		
+		comida=new Comida[7];
+		for(int i=0;i<comida.length;i++) {
+			int randomNum = ThreadLocalRandom.current().nextInt(300,500);
+			int parOImpar=randomNum%2;
+			int largo=comida.length;
+			comida[i]=new Comida(entorno.ancho()/largo+(entorno.ancho()/largo)*i, randomNum,10,10, 1,parOImpar);
+			}
+		
 		entorno.iniciar();
 	}
 
@@ -38,8 +53,29 @@ public class Juego extends InterfaceJuego {
 		entorno.cambiarFont("sans", 20, Color.WHITE);
 		entorno.escribirTexto("score: " + puntaje, entorno.ancho() - 150, 30);
 		
-		tubo.mover(entorno);
-		tubo.dibujar(entorno);
+		for(int i=0;i<tubo.length;i++) {
+			tubo[i].mover(entorno);
+			tubo[i].dibujar(entorno);
+			if(bird!=null) {
+				if(bird.choca(tubo[i], entorno)) {
+					bird=null;
+				}
+			}
+		}
+		
+		
+		for(int i=0;i<comida.length;i++) {
+			if(comida[i]!=null && bird!=null) {
+				if(comida[i].fueraDePantalla() ||comida[i].comido(bird)) {
+					int randomNum = ThreadLocalRandom.current().nextInt(300,500);
+					int parOImpar=randomNum%2;
+					comida[i]=new Comida(entorno.ancho(), randomNum,10,10, 1,parOImpar);
+				}
+				comida[i].dibujar(entorno);
+				comida[i].mover();
+			}
+		}
+		
 		if(laser!=null) {
 			laser.dibujar(entorno);
 			laser.mover(entorno);
@@ -48,11 +84,13 @@ public class Juego extends InterfaceJuego {
 		if(bird!=null) {
 			bird.dibujar(entorno);
 			bird.mover(entorno);
-			
 			if (entorno.sePresiono(entorno.TECLA_ESPACIO)) {
 				System.out.println("la nave dispara un rayo!");  //hacer clase disparo
 				laser=bird.disparar();
 			}
+	    }
+		
+			
 		}
 		
 		// TODO!
@@ -63,7 +101,8 @@ public class Juego extends InterfaceJuego {
 //			puntaje++;
 //		}
 
-	}
+	
+
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {

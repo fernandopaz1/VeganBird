@@ -55,11 +55,17 @@ public class Pajaro {
 		double[] obstaculo= a.dameObstaculo();
 		double der=(obstaculo[0]+obstaculo[2]/2);
 		double izq=(obstaculo[0]-obstaculo[2]/2);
-		double alto=(obstaculo[1]+obstaculo[3]/2);
-		if(x<=der && x>=izq && y>=alto) {
+		double alto=(obstaculo[1]-obstaculo[3]/2);
+		double alto2=(obstaculo[1]-400+obstaculo[3]/2);
+		if((x<=der && x>=izq && y>=alto) || (x<=der && x>=izq && y<=(alto2))) {
 			return true;
 		}
 		return false;
+	}
+	
+	public double[] damePajaro() {
+		double[] a= {x,y};
+		return a;
 	}
 	
 }
