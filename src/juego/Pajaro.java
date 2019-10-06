@@ -56,7 +56,7 @@ public class Pajaro {
 		double der=(obstaculo[0]+obstaculo[2]/2);
 		double izq=(obstaculo[0]-obstaculo[2]/2);
 		double alto=(obstaculo[1]-obstaculo[3]/2);
-		double alto2=(obstaculo[1]-400+obstaculo[3]/2);
+		double alto2=(obstaculo[1]-500+obstaculo[3]/2);
 		if((x<=der && x>=izq && y>=alto) || (x<=der && x>=izq && y<=(alto2))) {
 			return true;
 		}

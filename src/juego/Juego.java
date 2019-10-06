@@ -36,7 +36,7 @@ public class Juego extends InterfaceJuego {
 		
 		comida=new Comida[7];
 		for(int i=0;i<comida.length;i++) {
-			int randomNum = ThreadLocalRandom.current().nextInt(300,500);
+			int randomNum = ThreadLocalRandom.current().nextInt(300,400);
 			int parOImpar=randomNum%2;
 			int largo=comida.length;
 			comida[i]=new Comida(entorno.ancho()/largo+(entorno.ancho()/largo)*i, randomNum,10,10, 1,parOImpar);
@@ -51,7 +51,6 @@ public class Juego extends InterfaceJuego {
 		//Dibuja el fondo primero porque sino el fondo va a tapar todo
 		
 		entorno.cambiarFont("sans", 20, Color.WHITE);
-		entorno.escribirTexto("score: " + puntaje, entorno.ancho() - 150, 30);
 		
 		for(int i=0;i<tubo.length;i++) {
 			tubo[i].mover(entorno);
@@ -90,6 +89,8 @@ public class Juego extends InterfaceJuego {
 			}
 	    }
 		
+		entorno.escribirTexto("score: " + puntaje, entorno.ancho() - 150, 30);
+
 			
 		}
 		

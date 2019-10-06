@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Image;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Comida {
 	private double x;
@@ -22,14 +23,18 @@ public class Comida {
 		this.alto = alto;
 		this.velocidad = velocidad;
 		this.verdura = verdura==1 ? true:false;
+		this.convertida=false;
+		this.imagen= this.verdura ? Herramientas.cargarImagen("coffe.png") : Herramientas.cargarImagen("papitas.png");
 	}
 	
 	public void dibujar(Entorno e) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.yellow);
+		e.dibujarImagen(imagen, x, y, 0);
 	}
 	
 	public void mover() {
 		x-=velocidad;
+		y=this.verdura ? 300+100*Math.sin(x/100):300+100*Math.cos(x/50);
 	}
 	public boolean fueraDePantalla() {
 		if(x<0) {
@@ -50,4 +55,15 @@ public class Comida {
 		return false;
 	}
 	
+	public void convertido(Disparo shot) {
+		double[] disparo=shot.dameDisparo();
+		double der=(x+ancho/2);
+		double izq=(x-ancho/2);
+		double arriba=(y-alto/2);
+		double abajo=(y+alto/2);
+		if(disparo[0]<=der && disparo[0]>=izq && disparo[1]>=arriba && disparo[1]<=abajo) {
+			this.convertida=true;
+			this.imagen= this.verdura ? Herramientas.cargarImagen("coffe.png") : Herramientas.cargarImagen("papitas.png");
+		}
+	}
 }
