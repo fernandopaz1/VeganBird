@@ -20,6 +20,12 @@ public class Juego extends InterfaceJuego {
 	private Obstaculo[] tubo;
 	private Comida[] comida;
 	
+	private double anchoComida=20;
+	private double altoComida=20;
+	
+	private double anchoTubo=75;
+	private double altoTubo=300;
+	
 	public Juego() {
 		entorno = new Entorno(this, "VeganBird", 800, 600);
 		
@@ -31,7 +37,7 @@ public class Juego extends InterfaceJuego {
 		tubo=new Obstaculo[3];
 		for(int i=0;i<tubo.length;i++) {
 			int randomNum = ThreadLocalRandom.current().nextInt(entorno.alto()-100, entorno.alto());
-			tubo[i]=new Obstaculo(entorno.ancho()/3+(entorno.ancho()/3)*i, randomNum,75,225, 1);
+			tubo[i]=new Obstaculo(entorno.ancho()/3+(entorno.ancho()/3)*i, randomNum,anchoTubo,altoTubo, 1);
 			}
 		
 		comida=new Comida[7];
@@ -39,7 +45,7 @@ public class Juego extends InterfaceJuego {
 			int randomNum = ThreadLocalRandom.current().nextInt(300,400);
 			int parOImpar=randomNum%2;
 			int largo=comida.length;
-			comida[i]=new Comida(entorno.ancho()/largo+(entorno.ancho()/largo)*i, randomNum,10,10, 1,parOImpar);
+			comida[i]=new Comida(entorno.ancho()/largo+(entorno.ancho()/largo)*i, randomNum,anchoComida,altoComida, 1,parOImpar);
 			}
 		
 		entorno.iniciar();
@@ -50,25 +56,25 @@ public class Juego extends InterfaceJuego {
 		
 		//Dibuja el fondo primero porque sino el fondo va a tapar todo
 		
-		entorno.cambiarFont("sans", 20, Color.WHITE);
-		
-		for(int i=0;i<tubo.length;i++) {
-			tubo[i].mover(entorno);
-			tubo[i].dibujar(entorno);
-			if(bird!=null) {
-				if(bird.choca(tubo[i], entorno)) {
-					bird=null;
-				}
-			}
-		}
 		
 		
 		for(int i=0;i<comida.length;i++) {
 			if(comida[i]!=null && bird!=null) {
-				if(comida[i].fueraDePantalla() ||comida[i].comido(bird)) {
+				if(laser!=null) {
+					comida[i].convertido(laser);
+				}
+				
+				if(comida[i].fueraDePantalla()) {
 					int randomNum = ThreadLocalRandom.current().nextInt(300,500);
 					int parOImpar=randomNum%2;
-					comida[i]=new Comida(entorno.ancho(), randomNum,10,10, 1,parOImpar);
+					comida[i]=new Comida(entorno.ancho(), randomNum,anchoComida,altoComida, 1,parOImpar);
+				}
+				
+				if(bird.comido(comida[i])) {
+					puntaje=comida[i].damePuntaje(puntaje);
+					int randomNum = ThreadLocalRandom.current().nextInt(300,500);
+					int parOImpar=randomNum%2;
+					comida[i]=new Comida(entorno.ancho(), randomNum,anchoComida,altoComida, 1,parOImpar);
 				}
 				comida[i].dibujar(entorno);
 				comida[i].mover();
@@ -84,14 +90,39 @@ public class Juego extends InterfaceJuego {
 			bird.dibujar(entorno);
 			bird.mover(entorno);
 			if (entorno.sePresiono(entorno.TECLA_ESPACIO)) {
-				System.out.println("la nave dispara un rayo!");  //hacer clase disparo
+				System.out.println("fium!");  //hacer clase disparo
 				laser=bird.disparar();
 			}
 	    }
 		
+		for(int i=0;i<tubo.length;i++) {
+			tubo[i].mover(entorno);
+			tubo[i].dibujar(entorno);
+			if(tubo[i].fueraDePantalla(entorno)) {
+				int randomNum = ThreadLocalRandom.current().nextInt(entorno.alto()-200, entorno.alto());
+				tubo[i]=new Obstaculo(entorno.ancho()+anchoTubo/2, randomNum,anchoTubo,altoTubo, 1);
+			}
+			if(bird!=null) {
+				if(bird.choca(tubo[i], entorno)) {
+					bird=null;
+				}
+			}
+		}
+		
+		
+		if(puntaje>=0) {
+			entorno.cambiarFont("sans", 20, Color.WHITE);
+		}
+		else {
+			entorno.cambiarFont("sans", 20, Color.red);
+		}
+		
 		entorno.escribirTexto("score: " + puntaje, entorno.ancho() - 150, 30);
 
-			
+		if(bird==null) {
+			entorno.escribirTexto("Perdiste: " + puntaje, entorno.ancho()/2, entorno.alto()/2);
+		}	
+		
 		}
 		
 		// TODO!

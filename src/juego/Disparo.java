@@ -9,6 +9,8 @@ public class Disparo {
 	
 	private double x;
 	private double y;
+	private double ancho;
+	private double alto;
 	private double direccion;
 	private double velocidad;
 	private boolean enPantalla;
@@ -45,7 +47,7 @@ public class Disparo {
 	}
 	
 	public double[] dameDisparo() {
-		double[] a= {this.x,this.y};
+		double[] a= {this.x,this.y,this.ancho,this.alto};
 		return a;
 	}
 	

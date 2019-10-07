@@ -25,17 +25,20 @@ public class Obstaculo {
 	
 	public void dibujar(Entorno e) {
 		e.dibujarImagen(imagen, x, y, 0, 0.08);
-		e.dibujarImagen(imagen, x, y-500, Math.PI, 0.08);
+		e.dibujarImagen(imagen, x, y-450, Math.PI, 0.08);
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
-		e.dibujarRectangulo(x, y-500, ancho, alto, Math.PI, Color.red);
+		e.dibujarRectangulo(x, y-450, ancho, alto, Math.PI, Color.red);
 	}
 	
 	public void mover(Entorno e) {
-		if(x<0) {
-			x=e.ancho();
-		}
 		x-=velocidad;
 		
+	}
+	public boolean fueraDePantalla(Entorno e) {
+		if((x+ancho)<0) {
+			return true;
+		}
+		return false;
 	}
 
 	public double[] dameObstaculo() {
