@@ -26,12 +26,15 @@ public class Juego extends InterfaceJuego {
 	private double anchoTubo=75;
 	private double altoTubo=300;
 	
+	private double anchoPajaro=40;
+	private double altoPajaro=40;
+	
 	public Juego() {
 		entorno = new Entorno(this, "VeganBird", 800, 600);
 		
 		spaceImg = Herramientas.cargarImagen("space.jpg");
 		
-		bird = new Pajaro(entorno.ancho()/4, entorno.alto()/2);
+		bird = new Pajaro(entorno.ancho()/4, entorno.alto()/2,anchoPajaro,altoPajaro);
 		puntaje = 0;
 		
 		tubo=new Obstaculo[3];

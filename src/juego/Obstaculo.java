@@ -32,6 +32,7 @@ public class Obstaculo {
 	
 	public void mover(Entorno e) {
 		x-=velocidad;
+		//y+=0.5*Math.sin(x/100 );
 		
 	}
 	public boolean fueraDePantalla(Entorno e) {

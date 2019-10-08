@@ -6,7 +6,6 @@ import entorno.Entorno;
 import entorno.Herramientas;
 
 public class Disparo {
-	
 	private double x;
 	private double y;
 	private double ancho;
@@ -17,10 +16,11 @@ public class Disparo {
 	private Image image;
 	
 	
-	public Disparo(double x,double y,double direccion, double velocidad) {
+	public Disparo(double x,double y, double velocidad) {
 		this.x = x;
 		this.y = y;
-		this.direccion = direccion;
+		this.ancho=32;
+		this.alto=32;
 		this.velocidad = velocidad;
 		this.image = Herramientas.cargarImagen("fireball.gif");
 		this.enPantalla=true;
@@ -40,8 +40,7 @@ public class Disparo {
 	
 	public void mover(Entorno e) {
 		if(enPantalla) {
-			x+=velocidad*Math.cos(direccion);
-			y+=velocidad*Math.sin(direccion);
+			x+=velocidad;
 			return;
 		}
 	}

@@ -30,16 +30,17 @@ public class Comida {
 	public void dibujar(Entorno e) {
 		if(this.verdura) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.green);
+		e.dibujarImagen(imagen, x, y, 0);
 		return;
 		}
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
 		
-		//e.dibujarImagen(imagen, x, y, 0);
+		e.dibujarImagen(imagen, x, y, 0);
 	}
 	
 	public void mover() {
 		x-=velocidad;
-		y=this.verdura ? 300+100*Math.sin(x/100):300+100*Math.cos(x/50);
+		y=this.verdura ? 300+20*Math.sin(x/100):300+20*Math.sin(x/50);
 	}
 	public boolean fueraDePantalla() {
 		if(x<0) {

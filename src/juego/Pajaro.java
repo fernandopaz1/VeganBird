@@ -16,11 +16,11 @@ public class Pajaro {
 	private double subida;
 	private double bajada;
 	
-	public Pajaro(double x, double y) {
+	public Pajaro(double x, double y,double ancho,double alto) {
 		this.x = x;
 		this.y = y;
-		this.alto=40;
-		this.ancho=40;
+		this.ancho=ancho;
+		this.alto=alto;
 		this.image = Herramientas.cargarImagen("ship.png");
 		this.subida=4;
 		this.bajada=1;
@@ -46,7 +46,7 @@ public class Pajaro {
 	
 	public Disparo disparar() {
 		// TODO Auto-generated method stub
-		return new Disparo(x, y, 0, 10);
+		return new Disparo(x, y, 10);
 	}
 	
 	public boolean tocaSuelo(Entorno e) {	
@@ -62,9 +62,9 @@ public class Pajaro {
 		double[] obstaculo= a.dameObstaculo();
 		double der=(obstaculo[0]+obstaculo[2]/2);
 		double izq=(obstaculo[0]-obstaculo[2]/2);
-		double alto=(obstaculo[1]-obstaculo[3]/2);
+		double alto1=(obstaculo[1]-obstaculo[3]/2);
 		double alto2=(obstaculo[1]-450+obstaculo[3]/2);
-		if((x<=der && x>=izq && y>=alto) || (x<=der && x>=izq && y<=(alto2))) {
+		if(((x-ancho/2)<=der && (x+ancho/2)>=izq && (y+alto/2)>=alto1) || ((x-ancho/2)<=der && (x+ancho/2)>=izq && (y-alto/2)<=(alto2))) {
 			return true;
 		}
 		return false;
