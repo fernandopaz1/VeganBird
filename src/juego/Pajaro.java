@@ -21,15 +21,15 @@ public class Pajaro {
 		this.y = y;
 		this.ancho=ancho;
 		this.alto=alto;
-		this.image = Herramientas.cargarImagen("ship.png");
-		this.subida=4;
+		this.image = Herramientas.cargarImagen("Bird2.0.gif");
+		this.subida=3;
 		this.bajada=1;
 		
 	}
 	
 	public void dibujar(Entorno e) {
 		e.dibujarImagen(image, x, y, 0);
-		e.dibujarRectangulo(x, y, 40, 40, 0, Color.yellow);
+		//e.dibujarRectangulo(x, y, 40, 40, 0, Color.yellow);
 	}
 	
 		
@@ -63,7 +63,7 @@ public class Pajaro {
 		double der=(obstaculo[0]+obstaculo[2]/2);
 		double izq=(obstaculo[0]-obstaculo[2]/2);
 		double alto1=(obstaculo[1]-obstaculo[3]/2);
-		double alto2=(obstaculo[1]-450+obstaculo[3]/2);
+		double alto2=(obstaculo[1]-obstaculo[4]+obstaculo[3]/2);
 		if(((x-ancho/2)<=der && (x+ancho/2)>=izq && (y+alto/2)>=alto1) || ((x-ancho/2)<=der && (x+ancho/2)>=izq && (y-alto/2)<=(alto2))) {
 			return true;
 		}

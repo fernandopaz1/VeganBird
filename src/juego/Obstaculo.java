@@ -13,26 +13,28 @@ public class Obstaculo {
 	private Image imagen;
 	private double ancho;
 	private double alto;
+	private double aberturaTubo;
 	
-	public Obstaculo(double x, double y,double ancho,double alto, double velocidad) {
+	public Obstaculo(double x, double y,double ancho,double alto, double a) {
 		this.x = x;
 		this.y = y;
-		this.velocidad = velocidad;
+		this.velocidad = 1;
 		this.ancho=ancho;
 		this.alto=alto;
-		this.imagen = Herramientas.cargarImagen("tubo.png");
+		this.aberturaTubo=a;
+		this.imagen = Herramientas.cargarImagen("tuboresize.png");
 	}
 	
 	public void dibujar(Entorno e) {
-		e.dibujarImagen(imagen, x, y, 0, 0.08);
-		e.dibujarImagen(imagen, x, y-450, Math.PI, 0.08);
-		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
-		e.dibujarRectangulo(x, y-450, ancho, alto, Math.PI, Color.red);
+		//e.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
+		//e.dibujarRectangulo(x, y-aberturaTubo, ancho, alto, Math.PI, Color.red);
+		e.dibujarImagen(imagen, x, y, 0, 1);
+		e.dibujarImagen(imagen, x, y-aberturaTubo, Math.PI, 1);
 	}
 	
 	public void mover(Entorno e) {
 		x-=velocidad;
-		//y+=0.5*Math.sin(x/100 );
+		y+=0.1*Math.sin(x/100);
 		
 	}
 	public boolean fueraDePantalla(Entorno e) {
@@ -43,7 +45,7 @@ public class Obstaculo {
 	}
 
 	public double[] dameObstaculo() {
-		double[] a= {x,y,ancho,alto};
+		double[] a= {x,y,ancho,alto,aberturaTubo};
 		return a;
 	}
 }

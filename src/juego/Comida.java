@@ -24,23 +24,23 @@ public class Comida {
 		this.velocidad = velocidad;
 		this.verdura = verdura==1 ? true:false;
 		this.convertida=false;
-		this.imagen= this.verdura ? Herramientas.cargarImagen("coffe.png") : Herramientas.cargarImagen("papitas.png");
+		this.imagen= this.verdura ? Herramientas.cargarImagen("Brocoli.png") : Herramientas.cargarImagen("Hamburguesa.png");
 	}
 	
 	public void dibujar(Entorno e) {
-		if(this.verdura) {
+		/*if(this.verdura) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.green);
 		e.dibujarImagen(imagen, x, y, 0);
 		return;
 		}
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
-		
+		*/
 		e.dibujarImagen(imagen, x, y, 0);
 	}
 	
 	public void mover() {
 		x-=velocidad;
-		y=this.verdura ? 300+20*Math.sin(x/100):300+20*Math.sin(x/50);
+		y=300+20*Math.sin(x/50);
 	}
 	public boolean fueraDePantalla() {
 		if(x<0) {
@@ -65,7 +65,7 @@ public class Comida {
 		if(disparo[0]<=der && disparo[0]>=izq && disparo[1]>=arriba && disparo[1]<=abajo) {
 			this.convertida=true;
 			this.verdura=true;
-			this.imagen=Herramientas.cargarImagen("coffe.png");
+			this.imagen=Herramientas.cargarImagen("Brocoli.png");
 		}
 	}
 	

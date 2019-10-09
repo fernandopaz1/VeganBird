@@ -24,10 +24,13 @@ public class Juego extends InterfaceJuego {
 	private double altoComida=20;
 	
 	private double anchoTubo=75;
-	private double altoTubo=300;
+	private double altoTubo=500;
 	
 	private double anchoPajaro=40;
 	private double altoPajaro=40;
+	
+	private int cantComida=10;
+	private double aberturaTubo=650;
 	
 	public Juego() {
 		entorno = new Entorno(this, "VeganBird", 800, 600);
@@ -39,16 +42,15 @@ public class Juego extends InterfaceJuego {
 		
 		tubo=new Obstaculo[3];
 		for(int i=0;i<tubo.length;i++) {
-			int randomNum = ThreadLocalRandom.current().nextInt(entorno.alto()-100, entorno.alto());
-			tubo[i]=new Obstaculo(entorno.ancho()/3+(entorno.ancho()/3)*i, randomNum,anchoTubo,altoTubo, 1);
+			tubo[i]=new Obstaculo(entorno.ancho()/3+(entorno.ancho()/3)*i, entorno.alto()+50,anchoTubo,altoTubo, aberturaTubo+100);
 			}
 		
-		comida=new Comida[7];
+		comida=new Comida[cantComida];
 		for(int i=0;i<comida.length;i++) {
 			int randomNum = ThreadLocalRandom.current().nextInt(300,400);
 			int parOImpar=randomNum%2;
 			int largo=comida.length;
-			comida[i]=new Comida(entorno.ancho()/largo+(entorno.ancho()/largo)*i, randomNum,anchoComida,altoComida, 1,parOImpar);
+			comida[i]=new Comida(entorno.ancho()*(i)/largo, randomNum,anchoComida,altoComida, 1,parOImpar);
 			}
 		
 		entorno.iniciar();
@@ -77,7 +79,7 @@ public class Juego extends InterfaceJuego {
 					puntaje=comida[i].damePuntaje(puntaje);
 					int randomNum = ThreadLocalRandom.current().nextInt(300,500);
 					int parOImpar=randomNum%2;
-					comida[i]=new Comida(entorno.ancho(), randomNum,anchoComida,altoComida, 1,parOImpar);
+					comida[i]=new Comida(entorno.ancho()+entorno.ancho()/4, 300,anchoComida,altoComida, 1,parOImpar);
 				}
 				comida[i].dibujar(entorno);
 				comida[i].mover();
@@ -102,8 +104,11 @@ public class Juego extends InterfaceJuego {
 			tubo[i].mover(entorno);
 			tubo[i].dibujar(entorno);
 			if(tubo[i].fueraDePantalla(entorno)) {
-				int randomNum = ThreadLocalRandom.current().nextInt(entorno.alto()-200, entorno.alto());
-				tubo[i]=new Obstaculo(entorno.ancho()+anchoTubo/2, randomNum,anchoTubo,altoTubo, 1);
+				int randomNum = ThreadLocalRandom.current().nextInt(entorno.alto(), entorno.alto()+100);
+				tubo[i]=new Obstaculo(entorno.ancho()+anchoTubo/3, randomNum,anchoTubo,altoTubo, aberturaTubo);
+				int parOImpar=randomNum%2;
+				int largo=comida.length;
+					
 			}
 			if(bird!=null) {
 				if(bird.choca(tubo[i], entorno)) {
