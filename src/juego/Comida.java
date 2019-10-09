@@ -1,6 +1,6 @@
 package juego;
 
-import java.awt.Color;
+
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -28,19 +28,14 @@ public class Comida {
 	}
 	
 	public void dibujar(Entorno e) {
-		/*if(this.verdura) {
-		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.green);
-		e.dibujarImagen(imagen, x, y, 0);
-		return;
-		}
-		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
-		*/
 		e.dibujarImagen(imagen, x, y, 0);
 	}
 	
 	public void mover() {
+		double f= this.verdura ? 100 : 20;
+		double a=this.verdura ? 20 : 40;
 		x-=velocidad;
-		y=300+20*Math.sin(x/50);
+		y+=a*Math.sin(x/f)/f;
 	}
 	public boolean fueraDePantalla() {
 		if(x<0) {

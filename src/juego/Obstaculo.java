@@ -1,10 +1,11 @@
 package juego;
 
-import java.awt.Color;
+
+
 import java.awt.Image;
 
 import entorno.Entorno;
-import entorno.Herramientas;
+
 
 public class Obstaculo {
 	private double x;
@@ -15,26 +16,30 @@ public class Obstaculo {
 	private double alto;
 	private double aberturaTubo;
 	
-	public Obstaculo(double x, double y,double ancho,double alto, double a) {
+	public Obstaculo(double x, double y,double ancho,double alto, double a,Image imagen) {
 		this.x = x;
 		this.y = y;
 		this.velocidad = 1;
 		this.ancho=ancho;
 		this.alto=alto;
 		this.aberturaTubo=a;
-		this.imagen = Herramientas.cargarImagen("tuboresize.png");
+		this.imagen = imagen;
 	}
 	
 	public void dibujar(Entorno e) {
-		//e.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
-		//e.dibujarRectangulo(x, y-aberturaTubo, ancho, alto, Math.PI, Color.red);
 		e.dibujarImagen(imagen, x, y, 0, 1);
+		if(this.aberturaTubo!=0) {
 		e.dibujarImagen(imagen, x, y-aberturaTubo, Math.PI, 1);
+		}
 	}
 	
 	public void mover(Entorno e) {
 		x-=velocidad;
-		y+=0.1*Math.sin(x/100);
+		if(this.aberturaTubo!=0) {
+			double f=100;
+			double a=40;
+			y+=a*Math.sin((x+y)/f)/f;
+		}
 		
 	}
 	public boolean fueraDePantalla(Entorno e) {

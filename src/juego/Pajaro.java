@@ -1,6 +1,6 @@
 package juego;
 
-import java.awt.Color;
+
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -29,18 +29,16 @@ public class Pajaro {
 	
 	public void dibujar(Entorno e) {
 		e.dibujarImagen(image, x, y, 0);
-		//e.dibujarRectangulo(x, y, 40, 40, 0, Color.yellow);
 	}
 	
 		
 	public void mover(Entorno e) {	
-		if (e.estaPresionada(e.TECLA_ARRIBA) && !this.tocaTecho(e)) {
+		if (e.estaPresionada(e.TECLA_ARRIBA)) {
 			y-=subida;
 			return;
 		}
-		if(!this.tocaSuelo(e)) {
 			y+=bajada;
-		}
+
 	}
 	
 	
@@ -49,22 +47,19 @@ public class Pajaro {
 		return new Disparo(x, y, 10);
 	}
 	
-	public boolean tocaSuelo(Entorno e) {	
-		return this.y>e.alto() ? true: false;
-	}
-	
-	public boolean tocaTecho(Entorno e) {	
-		return this.y<0 ? true: false;
+	public boolean tocaSueloOTecho(Entorno e,Obstaculo suelo) {
+		double ground[]=suelo.dameObstaculo();
+		return this.y>(e.alto()-ground[3]/2) || this.y<0 ? true: false;
 	}
 	
 	
-	public boolean choca(Obstaculo a,Entorno e) {
+	public boolean choca(Obstaculo a,Obstaculo suelo,Entorno e) {
 		double[] obstaculo= a.dameObstaculo();
 		double der=(obstaculo[0]+obstaculo[2]/2);
 		double izq=(obstaculo[0]-obstaculo[2]/2);
 		double alto1=(obstaculo[1]-obstaculo[3]/2);
 		double alto2=(obstaculo[1]-obstaculo[4]+obstaculo[3]/2);
-		if(((x-ancho/2)<=der && (x+ancho/2)>=izq && (y+alto/2)>=alto1) || ((x-ancho/2)<=der && (x+ancho/2)>=izq && (y-alto/2)<=(alto2))) {
+		if((x<=der && x>=izq && y>=alto1) || (x<=der && x>=izq && y<=(alto2)) || this.tocaSueloOTecho(e,suelo)) {
 			return true;
 		}
 		return false;
