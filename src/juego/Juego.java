@@ -63,7 +63,7 @@ public class Juego extends InterfaceJuego {
 			int randomNum = ThreadLocalRandom.current().nextInt(300,400);
 			int parOImpar=randomNum%2;
 			int largo=comida.length;
-			comida[i]=new Comida(entorno.ancho()*(i)/largo, randomNum,anchoComida,altoComida, 1,parOImpar);
+			comida[i]=new Comida(entorno.ancho()*(largo+1+i)/largo, randomNum,anchoComida,altoComida, 1,parOImpar);
 			}
 		
 		entorno.iniciar();
