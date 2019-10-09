@@ -56,7 +56,7 @@ public class Juego extends InterfaceJuego {
 		
 		suelo=new Obstaculo[3];
 		for(int i=0;i<suelo.length;i++) {
-			suelo[i]=new Obstaculo( entorno.ancho()*((1+2*i)/2), entorno.alto(),anchoSuelo,altoSuelo,0,imagenSuelo);
+			suelo[i]=new Obstaculo( entorno.ancho()*((1+2*i)/2), entorno.alto()+altoSuelo/4,anchoSuelo,altoSuelo,0,imagenSuelo);
 			}
 		comida=new Comida[cantComida];
 		for(int i=0;i<comida.length;i++) {
@@ -73,13 +73,7 @@ public class Juego extends InterfaceJuego {
 		entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0);
 		
 		
-		for(int i=0;i<suelo.length;i++) {
-			suelo[i].mover(entorno);
-			suelo[i].dibujar(entorno);
-			if(suelo[i].fueraDePantalla(entorno)) {
-				suelo[i]=new Obstaculo(entorno.ancho()+anchoSuelo, entorno.alto(),anchoSuelo,altoSuelo, 0,imagenSuelo);					
-			}
-		}
+		
 		//Dibuja el fondo primero porque sino el fondo va a tapar todo
 		
 		
@@ -141,7 +135,7 @@ public class Juego extends InterfaceJuego {
 			suelo[i].mover(entorno);
 			suelo[i].dibujar(entorno);
 			if(suelo[i].fueraDePantalla(entorno)) {
-				suelo[i]=new Obstaculo(entorno.ancho()+anchoSuelo, entorno.alto(),anchoSuelo,altoSuelo, 0,imagenSuelo);					
+				suelo[i]=new Obstaculo(entorno.ancho()+anchoSuelo, entorno.alto()+altoSuelo/4,anchoSuelo,altoSuelo, 0,imagenSuelo);					
 			}
 		}
 		

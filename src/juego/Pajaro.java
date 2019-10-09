@@ -49,7 +49,7 @@ public class Pajaro {
 	
 	public boolean tocaSueloOTecho(Entorno e,Obstaculo suelo) {
 		double ground[]=suelo.dameObstaculo();
-		return this.y>(e.alto()-ground[3]/2) || this.y<0 ? true: false;
+		return this.y>(e.alto()-ground[3]/4) || this.y<0 ? true: false;
 	}
 	
 	
