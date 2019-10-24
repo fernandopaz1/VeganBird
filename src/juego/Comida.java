@@ -16,11 +16,11 @@ public class Comida {
 	private boolean convertida;
 	private Image imagen;
 	
-	public Comida(double x, double y, double ancho, double alto, double velocidad, int verdura) {
+	public Comida(double x, double y, double velocidad, int verdura) {
 		this.x = x;
 		this.y = y;
-		this.ancho = ancho;
-		this.alto = alto;
+		this.ancho = 20;
+		this.alto = 20;
 		this.velocidad = velocidad;
 		this.verdura = verdura==1 ? true:false;
 		this.convertida=false;
@@ -45,7 +45,7 @@ public class Comida {
 	}
 	
 	public double[] dameComida() {
-		double[] a= {x,y};
+		double[] a= {x,y,ancho,alto};
 		return a;
 	}
 	

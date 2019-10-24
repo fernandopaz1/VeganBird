@@ -13,48 +13,56 @@ public class Pajaro {
 	private double ancho;
 	private double alto;
 	private Image image;
-	private double subida;
-	private double bajada;
 	
-	public Pajaro(double x, double y,double ancho,double alto) {
+	private double velocidadDeSubida;
+	private double velocidadDeBajada;
+	
+	private int coolDown;
+	
+	public Pajaro(double x, double y) {
 		this.x = x;
 		this.y = y;
-		this.ancho=ancho;
-		this.alto=alto;
-		this.image = Herramientas.cargarImagen("Bird2.0.gif");
-		this.subida=3;
-		this.bajada=1;
-		
+		this.ancho=40;
+		this.alto=40;
+		this.image = Herramientas.cargarImagen("gallina.png");
+		this.velocidadDeSubida=50;
+		this.velocidadDeBajada=2;
+		this.coolDown=0;
 	}
 	
 	public void dibujar(Entorno e) {
 		e.dibujarImagen(image, x, y, 0);
 	}
 	
-		
-	public void mover(Entorno e) {	
-		if (e.estaPresionada(e.TECLA_ARRIBA)) {
-			y-=subida;
-			return;
-		}
-			y+=bajada;
-
+	public void caer() {
+		y += velocidadDeBajada;
 	}
 	
+	public void subir() {
+		y -= velocidadDeSubida;
+	}
+	
+	public boolean puedeDisparar() {
+		if(coolDown<=0) {
+			return true;}
+		coolDown--;
+		return false;
+	}
 	
 	public Disparo disparar() {
-		// TODO Auto-generated method stub
+		// Hacer un arreglo de disparado para que aparezcan muchos tiros en pantalla y se puedan convertir varias comidas a la vez
+		coolDown=50;
 		return new Disparo(x, y, 10);
 	}
 	
-	public boolean tocaSueloOTecho(Entorno e,Obstaculo suelo) {
+	public boolean tocaSueloOTecho(Entorno e, Obstaculo suelo) {
 		double ground[]=suelo.dameObstaculo();
 		return this.y>(e.alto()-ground[3]/4) || this.y<0 ? true: false;
 	}
 	
 	
-	public boolean choca(Obstaculo a,Obstaculo suelo,Entorno e) {
-		double[] obstaculo= a.dameObstaculo();
+	public boolean choca(Obstaculo tubo, Obstaculo suelo, Entorno e) {
+		double[] obstaculo= tubo.dameObstaculo();
 		double der=(obstaculo[0]+obstaculo[2]/2);
 		double izq=(obstaculo[0]-obstaculo[2]/2);
 		double alto1=(obstaculo[1]-obstaculo[3]/2);
@@ -65,7 +73,7 @@ public class Pajaro {
 		return false;
 	}
 	
-	public boolean comido(Comida comida) {
+	public boolean seComioLa(Comida comida) {
 		double[] morfi=comida.dameComida();
 		double der=(x+ancho/2);
 		double izq=(x-ancho/2);
@@ -77,9 +85,12 @@ public class Pajaro {
 		return false;
 	}
 	
+	
 	public double[] damePajaro() {
-		double[] a= {x,y};
+		double[] a= {x,y,ancho,alto};
 		return a;
 	}
+
+	
 	
 }

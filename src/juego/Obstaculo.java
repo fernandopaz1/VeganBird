@@ -8,35 +8,47 @@ import entorno.Entorno;
 
 
 public class Obstaculo {
+	
+	private static final int FRECUENCIA_DE_MOVIMIENTO_VERTICAL = 100;
+	
 	private double x;
 	private double y;
 	private double velocidad;
 	private Image imagen;
 	private double ancho;
 	private double alto;
-	private double aberturaTubo;
+	private double abertura;
+	private boolean esSuelo;
 	
-	public Obstaculo(double x, double y,double ancho,double alto, double a,Image imagen) {
+	public Obstaculo(double x, double y, boolean suelo,Image imagen) {
 		this.x = x;
 		this.y = y;
 		this.velocidad = 1;
-		this.ancho=ancho;
-		this.alto=alto;
-		this.aberturaTubo=a;
+		this.esSuelo=suelo;
+		if (suelo) {
+			this.ancho=800;
+			this.alto=250;
+			this.abertura=0;
+		}else {
+			this.ancho=75;
+			this.alto=500;
+			this.abertura=650;
+		}
+		
 		this.imagen = imagen;
 	}
 	
 	public void dibujar(Entorno e) {
 		e.dibujarImagen(imagen, x, y, 0, 1);
-		if(this.aberturaTubo!=0) {
-		e.dibujarImagen(imagen, x, y-aberturaTubo, Math.PI, 1);
+		if(esSuelo==false) {
+			e.dibujarImagen(imagen, x, y-abertura, Math.PI, 1);
 		}
 	}
 	
 	public void mover(Entorno e) {
 		x-=velocidad;
-		if(this.aberturaTubo!=0) {
-			double f=100;
+		if(this.abertura!=0) {
+			double f=FRECUENCIA_DE_MOVIMIENTO_VERTICAL;
 			double a=40;
 			y+=a*Math.sin((x+y)/f)/f;
 		}
@@ -50,7 +62,7 @@ public class Obstaculo {
 	}
 
 	public double[] dameObstaculo() {
-		double[] a= {x,y,ancho,alto,aberturaTubo};
+		double[] a= {x,y,ancho,alto,abertura};
 		return a;
 	}
 }
