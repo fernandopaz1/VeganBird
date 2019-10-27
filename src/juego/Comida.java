@@ -1,8 +1,7 @@
 package juego;
 
-
 import java.awt.Image;
-
+import java.util.Random;
 import entorno.Entorno;
 import entorno.Herramientas;
 
@@ -16,15 +15,18 @@ public class Comida {
 	private boolean convertida;
 	private Image imagen;
 	
-	public Comida(double x, double y, double velocidad, int verdura) {
+    Random randomGenerator = new Random();
+	boolean randomBoolean = randomGenerator.nextBoolean();
+	
+	public Comida(double x, double y, double velocidad, boolean verdura) {
 		this.x = x;
 		this.y = y;
 		this.ancho = 20;
 		this.alto = 20;
 		this.velocidad = velocidad;
-		this.verdura = verdura==1 ? true:false;
-		this.convertida=false;
-		this.imagen= this.verdura ? Herramientas.cargarImagen("Brocoli.png") : Herramientas.cargarImagen("Hamburguesa.png");
+		this.verdura = randomBoolean;
+		this.convertida = false;
+		this.imagen = this.verdura ? Herramientas.cargarImagen("Brocoli.png") : Herramientas.cargarImagen("Hamburguesa.png");
 	}
 	
 	public void dibujar(Entorno e) {
@@ -32,41 +34,34 @@ public class Comida {
 	}
 	
 	public void mover() {
-		double f= this.verdura ? 100 : 20;
-		double a=this.verdura ? 20 : 40;
-		x-=velocidad;
-		y+=a*Math.sin(x/f)/f;
+		double f = this.verdura ? 100 : 20;
+		double a = this.verdura ? 20 : 40;
+		x -= velocidad;
+		y += a*Math.sin(x/f)/f;
 	}
-	public boolean fueraDePantalla() {
-		if(x<0) {
-			return true;
-		}
-		return false;
-	}
+	
 	
 	public double[] dameComida() {
-		double[] a= {x,y,ancho,alto};
-		return a;
+		double[] arrayPosicionDeComida= {x,y,ancho,alto};
+		return arrayPosicionDeComida;
 	}
 	
-	
-	
-	public void convertido(Disparo shot) {
-		double[] disparo=shot.dameDisparo();
-		double der=(x+ancho/2);
-		double izq=(x-ancho/2);
-		double arriba=(y-alto/2);
-		double abajo=(y+alto/2);
-		if(disparo[0]<=der && disparo[0]>=izq && disparo[1]>=arriba && disparo[1]<=abajo) {
-			this.convertida=true;
-			this.verdura=true;
-			this.imagen=Herramientas.cargarImagen("Brocoli.png");
+	public void recibeDisparo(Disparo shot) {
+		double[] disparo = shot.dameDisparo();
+		double der = (x+ancho/2);
+		double izq = (x-ancho/2);
+		double arriba = (y-alto/2);
+		double abajo = (y+alto/2);
+		if (disparo[0] <= der && disparo[0] >= izq && disparo[1] >= arriba && disparo[1] <= abajo) {
+			this.convertida = true;
+			this.verdura = true;
+			this.imagen = Herramientas.cargarImagen("Brocoli.png");
 		}
 	}
 	
 	public int damePuntaje(int p) {
-		if(!this.verdura) {
-			p-=5;
+		if (!this.verdura) {
+			p -= 5;
 			return p;
 		}
 		return this.convertida ? p+3 :p+5;
