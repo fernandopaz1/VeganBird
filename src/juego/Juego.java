@@ -52,7 +52,7 @@ public class Juego extends InterfaceJuego {
 		for (int i = 0; i < comida.length; i++) {
 			int randomNum = ThreadLocalRandom.current().nextInt(300,400);
 			int largo = comida.length;
-			comida[i] = new Comida(entorno.ancho()*(largo+1+i)/largo, randomNum, 1, randomBoolean);
+			comida[i] = new Comida(entorno.ancho()*(largo+1+i)/largo, randomNum, randomBoolean);
 			}
 		
 		entorno.iniciar();
@@ -70,50 +70,136 @@ public class Juego extends InterfaceJuego {
 		return bordeDerechoDeObstaculo<0 ? true:false;
 	}
 	
-
-	public void tick() {
-		entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0);
-		
-	    Random randomGenerator = new Random();
-		boolean randomBoolean = randomGenerator.nextBoolean();
-		
-		if (bird != null) {
-			for (int i = 0; i < comida.length; i++) {
-				if (comida[i] != null && bird != null) {
-					for (int j = 0; j < cantDisparos; j++) {
-						if (disparo[j] != null) {
-							comida[i].recibeDisparo(disparo[j]);
-						}
-					}	
-				
-				
-				if (bird.seComioLaComida(comida[i])) {
-					puntaje = comida[i].damePuntaje(puntaje);
-					int randomNum = ThreadLocalRandom.current().nextInt(220,320);
-					comida[i] = new Comida(entorno.ancho()+entorno.ancho()/4, randomNum, 1, randomBoolean);
-				}
-				comida[i].dibujar(entorno);
-				comida[i].mover();
-				
-
-				if (comidaFueraDeJuego(comida[i])) {
-					int randomNum = ThreadLocalRandom.current().nextInt(220,320);
-					comida[i]=null;
-					comida[i] = new Comida(entorno.ancho(), randomNum, 1, randomBoolean);
+	public static boolean disparoFueraDeJuego(Entorno entorno, Disparo disparo) {
+		double[] posicionDeDisparo =disparo.dameDisparo();
+		return posicionDeDisparo[0]>entorno.ancho() ? true:false;
+	}
+	
+	public static void crearComida(Entorno entorno,Comida[] comida) {
+		for(int i=0;i<comida.length;i++) {
+			if(comida[i]==null) {
+				int randomY = ThreadLocalRandom.current().nextInt(220,320);
+				Random randomGenerator = new Random();
+				boolean verduraOHamburgesa = randomGenerator.nextBoolean();
+				comida[i] = new Comida(entorno.ancho()+entorno.ancho()/4, randomY, verduraOHamburgesa);
+				return;
+			}
+		}
+	}
+	
+	public static void crearSuelo(Entorno entorno,Obstaculo[] obstaculo,Image imagenSuelo) {
+			for (int i = 0; i < obstaculo.length; i++) {
+				if(obstaculo[i]==null) {
+					System.out.println("Suelo");
+					obstaculo[i] = new Obstaculo(entorno.ancho()+800, entorno.alto(), true, imagenSuelo);					
+					return;
 				}
 			}
 		}
 		
+		
+	public static void crearTubo(Entorno entorno,Obstaculo[] obstaculo,Image imagenTubo) {
+		for (int i = 0; i < obstaculo.length; i++) {
+			if(obstaculo[i]==null) {
+				int randomY = ThreadLocalRandom.current().nextInt(entorno.alto(), entorno.alto()+100);
+				obstaculo[i] = new Obstaculo(entorno.ancho()+75/2, randomY, false, imagenTubo);					
+				return;
+			}
+		}
+	}
+	
+		
+
+	public void tick() {
+		entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0);
+		
+		
+		if (bird != null) {
+			/*
+			 *********************************************
+			 *
+			 *Iteraciones relacionadas con la comida
+			 * 
+			 * ******************************************
+			 */
+			for (int i = 0; i < comida.length; i++) {	
+				if (comida[i] != null) {
+					comida[i].dibujar(entorno);
+					comida[i].mover();
+					for (int j = 0; j < cantDisparos; j++) {
+						if (disparo[j] != null) {
+							comida[i].recibeDisparo(disparo[j]);
+						}
+					}
+					if (bird.seComioLaComida(comida[i]) || comidaFueraDeJuego(comida[i])) {
+						puntaje  += comida[i].damePuntaje(puntaje);
+						comida[i] = null;
+					}
+				}
+		}
+		crearComida(entorno, comida);
+
+		/*
+		 *********************************************
+		 *
+		 *Iteraciones relacionadas con el Disparo
+		 * 
+		 * ******************************************
+		 */
 		for (int i = 0 ; i < cantDisparos; i++) {
 			if (disparo[i] != null) {
 				disparo[i].dibujar(entorno);
 				disparo[i].mover();
-				if (disparo[i].fueraDeRango(entorno)) {
+				if (disparoFueraDeJuego(entorno, disparo[i])) {
 					disparo[i] = null;
 				}
 			}
 		}
 		
+
+		/*
+		 *********************************************
+		 *
+		 *Iteraciones relacionadas obstaculos tipo tubo comida
+		 * 
+		 * ******************************************
+		 */
+		for (int i = 0; i < tubo.length; i++) {
+			tubo[i].mover();
+			tubo[i].dibujar(entorno);
+				if(obstaculoFueraDeJuego(tubo[i])) {
+					tubo[i]=null;					
+				}
+			}
+		}
+		crearTubo(entorno,tubo,imagenTubo);
+
+		/*
+		 *********************************************
+		 *
+		 *Iteraciones relacionadas con obstaculos tipo suelo
+		 * 
+		 * ******************************************
+		 */
+		
+		for (int i = 0; i < suelo.length; i++) {
+			if(suelo[i] != null) {
+				suelo[i].mover();
+				suelo[i].dibujar(entorno);
+				if(obstaculoFueraDeJuego(suelo[i])) {					
+					suelo[i] = null;
+				}
+			}
+		}
+		crearSuelo(entorno,suelo,imagenSuelo);
+
+		/*
+		 *********************************************
+		 *
+		 *Iteraciones relacionadas con el pajaro
+		 * 
+		 * ******************************************
+		 */
 		if (bird != null) {
 			bird.dibujar(entorno);
 			bird.caer();
@@ -121,55 +207,60 @@ public class Juego extends InterfaceJuego {
 				bird.subir();
 			}
 			
-			for (int i = 0 ; i < cantDisparos; i++) {	
-				if (entorno.sePresiono(entorno.TECLA_ESPACIO) && disparo[i] == null) {		
-						disparo[i] = bird.disparar();
+			for (int k = 0 ; k < cantDisparos; k++) {	
+				if (entorno.sePresiono(entorno.TECLA_ESPACIO) && disparo[k] == null) {		
+						disparo[k] = bird.disparar();
 						break;
 				}
 			}
-	    }
-		
-		for (int i = 0; i < tubo.length; i++) {
-			tubo[i].mover();
-			tubo[i].dibujar(entorno);
-			if(obstaculoFueraDeJuego(tubo[i])) {
-				int randomNum = ThreadLocalRandom.current().nextInt(entorno.alto(), entorno.alto()+100);
-				tubo[i]=null;
-				tubo[i] = new Obstaculo(entorno.ancho()+75/2, randomNum, false, imagenTubo);					
-			}
-			
-			if (bird != null) {
-				if (bird.chocaConElTubo(tubo[i]) || bird.tocaSuelo(suelo[i]) || bird.tocaTecho(entorno)) {
-					bird = null;
+			for(int i = 0 ; i<tubo.length ; i++) {
+				if (tubo[i] != null && bird!=null) {
+					if (bird.chocaConElTubo(tubo[i])) {
+						bird = null;
+					}
 				}
 			}
-		}
-		
-		for (int i = 0; i < suelo.length; i++) {
-			suelo[i].mover();
-			suelo[i].dibujar(entorno);
-			if(obstaculoFueraDeJuego(suelo[i])) {
-				suelo[i] = new Obstaculo(entorno.ancho()+800, entorno.alto(), true, imagenSuelo);					
+			for(int j = 0 ; j<suelo.length ; j++) {	
+				if (suelo[j] != null && bird!=null) {
+					if (bird.tocaSuelo(suelo[j]) || bird.tocaTecho(entorno)) {
+						bird = null;
+					}
+				}
 			}
-		}
-		
-		if (puntaje >= 0) {
-			entorno.cambiarFont("monospaced", 20, Color.WHITE);
-		}else {
-			entorno.cambiarFont("monospaced", 20, Color.red);
-		}
-		
-		entorno.escribirTexto("score: " + puntaje, entorno.ancho() - 150, 30);
-		
-		if (puntaje >= 10) {
-			vida = 1;
-		}else {
-			vida = 0;
-		}
-		
-		
-		}
-		
+			
+
+			/*
+			 *********************************************
+			 *
+			 *Puntaje y vidas
+			 * 
+			 * ******************************************
+			 */
+			
+			if (puntaje >= 0) {
+				entorno.cambiarFont("monospaced", 20, Color.WHITE);
+			}else {
+				entorno.cambiarFont("monospaced", 20, Color.red);
+			}
+			
+			entorno.escribirTexto("score: " + puntaje, entorno.ancho() - 150, 30);
+			
+			if (puntaje >= 10) {
+				vida = 1;
+			}else {
+				vida = 0;
+			}
+			
+	    }
+
+		/*
+		 *********************************************
+		 *
+		 *Cuando el pajarao muere
+		 * 
+		 * ******************************************
+		 */
+				
 		if (bird == null) {
 			fondo = Herramientas.cargarImagen("end.gif");
 			entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0);
@@ -188,6 +279,7 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 	}
+	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Juego juego = new Juego();

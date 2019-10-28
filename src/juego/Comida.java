@@ -6,6 +6,7 @@ import entorno.Entorno;
 import entorno.Herramientas;
 
 public class Comida {
+	private static final int VELOCIDAD = 1;
 	private double x;
 	private double y;
 	private double ancho;
@@ -18,12 +19,12 @@ public class Comida {
     Random randomGenerator = new Random();
 	boolean randomBoolean = randomGenerator.nextBoolean();
 	
-	public Comida(double x, double y, double velocidad, boolean verdura) {
+	public Comida(double x, double y, boolean verdura) {
 		this.x = x;
 		this.y = y;
 		this.ancho = 20;
 		this.alto = 20;
-		this.velocidad = velocidad;
+		this.velocidad = VELOCIDAD;
 		this.verdura = randomBoolean;
 		this.convertida = false;
 		this.imagen = this.verdura ? Herramientas.cargarImagen("Brocoli.png") : Herramientas.cargarImagen("Hamburguesa.png");
@@ -60,10 +61,13 @@ public class Comida {
 	}
 	
 	public int damePuntaje(int p) {
+		if(x<0) {
+			return 0;
+		}
 		if (!this.verdura) {
 			p -= 5;
 			return p;
 		}
-		return this.convertida ? p+3 :p+5;
+		return this.convertida ? 3 : 5;
 	}
 }
