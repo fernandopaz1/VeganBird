@@ -11,8 +11,6 @@ public class Juego extends InterfaceJuego {
 	
 	private Entorno entorno;
 	private Image fondo;
-	private Image imagenSuelo;
-	private Image imagenTubo;
 	private Pajaro pajaro;
 	private int puntaje;
 	private Disparo[] disparo;
@@ -25,23 +23,20 @@ public class Juego extends InterfaceJuego {
 
 	public Juego() {
 		
-		entorno = new Entorno(this, "VeganBird", 800, 600);
+		entorno = new Entorno(this, "Vegan Bird - Grupo 6", 800, 600);
 		fondo = Herramientas.cargarImagen("fondo.jpg");
-		imagenSuelo = Herramientas.cargarImagen("suelo.png");
-		imagenTubo = Herramientas.cargarImagen("tubo.png");
 		disparo = new Disparo[cantDisparos];
 		pajaro = new Pajaro(entorno.ancho()/4, entorno.alto()/2);
 		puntaje = 0;
 		tubo = new Obstaculo[3];
 		
-		
 		for (int i = 0; i < tubo.length; i++) {
-			tubo[i] = new Obstaculo( (3+i)*(entorno.ancho()+75)/3, entorno.alto(), false, imagenTubo);
+			tubo[i] = new Obstaculo( (3+i)*(entorno.ancho()+75)/3, entorno.alto(), false);
 			}
 		
 		suelo = new Obstaculo[3];
 		for (int i = 0; i < suelo.length; i++) {
-			suelo[i] = new Obstaculo( entorno.ancho()*((1+2*i)/2), entorno.alto(), true, imagenSuelo);
+			suelo[i] = new Obstaculo( entorno.ancho()*((1+2*i)/2), entorno.alto(), true);
 			}
 		
 		comida = new Comida[cantComida];
@@ -50,30 +45,28 @@ public class Juego extends InterfaceJuego {
 			int largo = comida.length;
 			comida[i] = new Comida(entorno.ancho()*(largo+1+i)/largo, randomNum);
 			}
-		
 		entorno.iniciar();
 	}
 	
-	
 	public static boolean comidaFueraDeJuego(Comida comida) {
-		double[] arrayPosicionDeComida =comida.dameComida();
-		return arrayPosicionDeComida[0]<0 ? true:false;
+		double[] arrayPosicionDeComida =comida.damePosiciones();
+		return arrayPosicionDeComida[0] < 0 ? true:false;
 	}
 	
 	public static boolean obstaculoFueraDeJuego(Obstaculo obst) {
-		double[] posicionDeObtaculo =obst.dameObstaculo();
+		double[] posicionDeObtaculo =obst.damePosiciones();
 		double bordeDerechoDeObstaculo=posicionDeObtaculo[0]+posicionDeObtaculo[2]/2;
-		return bordeDerechoDeObstaculo<0 ? true:false;
+		return bordeDerechoDeObstaculo < 0 ? true:false;
 	}
 	
 	public static boolean disparoFueraDeJuego(Entorno entorno, Disparo disparo) {
-		double[] posicionDeDisparo =disparo.dameDisparo();
-		return posicionDeDisparo[0]>entorno.ancho() ? true:false;
+		double[] posicionDeDisparo =disparo.damePosiciones();
+		return posicionDeDisparo[0] > entorno.ancho() ? true:false;
 	}
 	
 	public static void crearComida(Entorno entorno,Comida[] comida) {
-		for(int i=0;i<comida.length;i++) {
-			if(comida[i]==null) {
+		for (int i = 0; i < comida.length; i++) {
+			if (comida[i] == null) {
 				int randomY = ThreadLocalRandom.current().nextInt(220,320);
 				comida[i] = new Comida(entorno.ancho()+entorno.ancho()/4, randomY);
 				return;
@@ -81,40 +74,36 @@ public class Juego extends InterfaceJuego {
 		}
 	}
 	
-	public static void crearSuelo(Entorno entorno,Obstaculo[] obstaculo,Image imagenSuelo) {
+	public static void crearSuelo(Entorno entorno,Obstaculo[] obstaculo) {
 			for (int i = 0; i < obstaculo.length; i++) {
-				if(obstaculo[i]==null) {
-					obstaculo[i] = new Obstaculo(entorno.ancho()+800, entorno.alto(), true, imagenSuelo);					
+				if (obstaculo[i] == null) {
+					obstaculo[i] = new Obstaculo(entorno.ancho()+800, entorno.alto(), true);					
 					return;
 				}
 			}
-		}
+		}	
 		
-		
-	public static void crearTubo(Entorno entorno,Obstaculo[] obstaculo,Image imagenTubo) {
+	public static void crearTubo(Entorno entorno,Obstaculo[] obstaculo) {
 		for (int i = 0; i < obstaculo.length; i++) {
-			if(obstaculo[i]==null) {
+			if (obstaculo[i] == null) {
 				int randomY = ThreadLocalRandom.current().nextInt(entorno.alto(), entorno.alto()+100);
-				obstaculo[i] = new Obstaculo(entorno.ancho()+75/2, randomY, false, imagenTubo);					
+				obstaculo[i] = new Obstaculo(entorno.ancho()+75/2, randomY, false);					
 				return;
 			}
 		}
-	}
-	
-		
+	}	
 
 	public void tick() {
 		entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0);
 		
-		
 		if (pajaro != null) {
-			/*
-			 *********************************************
+			
+			 /**********************************************
 			 *
 			 *Iteraciones relacionadas con la comida
 			 * 
-			 * ******************************************
-			 */
+			 **********************************************/
+			 
 			for (int i = 0; i < comida.length; i++) {	
 				if (comida[i] != null) {
 					comida[i].dibujar(entorno);
@@ -132,14 +121,13 @@ public class Juego extends InterfaceJuego {
 		}
 		crearComida(entorno, comida);
 
-		/*
-		 *********************************************
+		 /**********************************************
 		 *
 		 *Iteraciones relacionadas con el Disparo
 		 * 
-		 * ******************************************
-		 */
-		for (int i = 0 ; i < cantDisparos; i++) {
+		 **********************************************/
+		 
+		for (int i = 0; i < cantDisparos; i++) {
 			if (disparo[i] != null) {
 				disparo[i].dibujar(entorno);
 				disparo[i].mover();
@@ -149,50 +137,46 @@ public class Juego extends InterfaceJuego {
 			}
 		}
 		
-
-		/*
-		 *********************************************
+		 /**********************************************
 		 *
 		 *Iteraciones relacionadas obstaculos tipo tubo comida
 		 * 
-		 * ******************************************
-		 */
+		 **********************************************/
+		 
 		for (int i = 0; i < tubo.length; i++) {
 			tubo[i].mover();
 			tubo[i].dibujar(entorno);
-				if(obstaculoFueraDeJuego(tubo[i])) {
-					tubo[i]=null;					
+				if (obstaculoFueraDeJuego(tubo[i])) {
+					tubo[i] = null;					
 				}
 			}
 		}
-		crearTubo(entorno,tubo,imagenTubo);
+		crearTubo(entorno,tubo);
 
-		/*
-		 *********************************************
+		 /**********************************************
 		 *
 		 *Iteraciones relacionadas con obstaculos tipo suelo
 		 * 
-		 * ******************************************
-		 */
+		 **********************************************/
+		 
 		
 		for (int i = 0; i < suelo.length; i++) {
-			if(suelo[i] != null) {
+			if (suelo[i] != null) {
 				suelo[i].mover();
 				suelo[i].dibujar(entorno);
-				if(obstaculoFueraDeJuego(suelo[i])) {					
+				if (obstaculoFueraDeJuego(suelo[i])) {					
 					suelo[i] = null;
 				}
 			}
 		}
-		crearSuelo(entorno,suelo,imagenSuelo);
-
-		/*
-		 *********************************************
+		crearSuelo(entorno,suelo);
+		
+		 /**********************************************
 		 *
 		 *Iteraciones relacionadas con el pajaro
 		 * 
-		 * ******************************************
-		 */
+		 **********************************************/
+		 
 		if (pajaro != null) {
 			pajaro.dibujar(entorno);
 			pajaro.caer();
@@ -200,60 +184,54 @@ public class Juego extends InterfaceJuego {
 				pajaro.subir();
 			}
 			
-			for (int k = 0 ; k < cantDisparos; k++) {	
+			for (int k = 0; k < cantDisparos; k++) {	
 				if (entorno.sePresiono(entorno.TECLA_ESPACIO) && disparo[k] == null) {		
 						disparo[k] = pajaro.disparar();
 						break;
 				}
 			}
-			for(int i = 0 ; i<tubo.length ; i++) {
-				if (tubo[i] != null && pajaro!=null) {
+			
+			for (int i = 0; i < tubo.length; i++) {
+				if (tubo[i] != null && pajaro != null) {
 					if (pajaro.chocaConElTubo(tubo[i])) {
 						pajaro = null;
 					}
 				}
 			}
-			for(int j = 0 ; j<suelo.length ; j++) {	
-				if (suelo[j] != null && pajaro!=null) {
+			
+			for (int j = 0; j < suelo.length; j++) {	
+				if (suelo[j] != null && pajaro != null) {
 					if (pajaro.tocaSuelo(suelo[j]) || pajaro.tocaTecho()) {
 						pajaro = null;
 					}
 				}
 			}
 			
-
-			/*
-			 *********************************************
+			 /**********************************************
 			 *
-			 *Puntaje y vidas
-			 * 
-			 * ******************************************
-			 */
-			
+			 Puntaje y vidas
+			 *
+			 **********************************************/
+			 
 			if (puntaje >= 0) {
 				entorno.cambiarFont("monospaced", 20, Color.WHITE);
 			}else {
 				entorno.cambiarFont("monospaced", 20, Color.red);
 			}
-			
 			entorno.escribirTexto("score: " + puntaje, entorno.ancho() - 150, 30);
-			
-			if (puntaje >= 10) {
+			if (puntaje >= 100) {
 				vida = 1;
 			}else {
 				vida = 0;
 			}
-			
-	    }
-
-		/*
-		 *********************************************
+		}
+		
+		 /**********************************************
 		 *
-		 *Cuando el pajarao muere
+		 *Cuando el pajaro muere
 		 * 
-		 * ******************************************
-		 */
-				
+		 * *******************************************/
+			
 		if (pajaro == null) {
 			fondo = Herramientas.cargarImagen("end.gif");
 			entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0);

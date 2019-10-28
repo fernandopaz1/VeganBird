@@ -14,6 +14,7 @@ public class Disparo {
 	
 	public Disparo(double x,double y) {
 		this.x = x;
+
 		this.y = y;
 		this.ancho = 32;
 		this.alto = 32;
@@ -30,15 +31,8 @@ public class Disparo {
 			return;
 	}
 	
-	public double[] dameDisparo() {
-		double[] arrayPosicionDeDisparo = {this.x,this.y,this.ancho,this.alto};
-		return arrayPosicionDeDisparo;
+	public double[] damePosiciones() {
+		return new double[] {x, y, ancho, alto};
 	}
 	
-	public boolean fueraDeRango(Entorno e) {
-		if (x-ancho > e.ancho()) {
-			return true;
-		}
-		return false;
-	}
 }

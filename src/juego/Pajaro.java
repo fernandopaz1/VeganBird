@@ -38,13 +38,12 @@ public class Pajaro {
 		y -= velocidadDeSubida;
 	}
 	
-	
 	public Disparo disparar() {
 		return new Disparo(x, y);
 	}
 	
 	public boolean tocaSuelo(Obstaculo suelo) {
-		double ground[] = suelo.dameObstaculo();
+		double ground[] = suelo.damePosiciones();
 		return this.y > (ground[1]-ground[3]/4) ? true: false;
 	}
 	
@@ -57,7 +56,7 @@ public class Pajaro {
 	}
 	
 	public boolean seComioLaComida(Comida comida) {
-		double[] food = comida.dameComida();
+		double[] food = comida.damePosiciones();
 		double der = (x+ancho/2);
 		double izq = (x-ancho/2);
 		double arriba = (y-alto/2);
@@ -68,8 +67,7 @@ public class Pajaro {
 		return false;
 	}
 	
-	public double[] damePajaro() {
-		double[] arrayPosicionDePajaro = {x, y, ancho, alto};
-		return arrayPosicionDePajaro;
+	public double[] damePosiciones() {
+		return new double[] {x, y, ancho, alto};
 	}
 }

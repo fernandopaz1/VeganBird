@@ -2,6 +2,7 @@ package juego;
 
 import java.awt.Image;
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Obstaculo {
 	
@@ -22,7 +23,7 @@ public class Obstaculo {
 	private double abertura;
 	private boolean esSuelo;
 	
-	public Obstaculo(double x, double y, boolean suelo,Image imagen) {
+	public Obstaculo(double x, double y, boolean suelo) {
 		this.x = x;
 		this.y = y;
 		this.velocidad = VELOCIDAD_OBSTACULOS;
@@ -31,13 +32,13 @@ public class Obstaculo {
 			this.ancho = ANCHO_DEL_SUELO;
 			this.alto = ALTO_DEL_SUELO;
 			this.abertura = 0;
+			this.imagen = Herramientas.cargarImagen("suelo.png");
 		}else {
 			this.ancho = ANCHO_DEL_TUBO;
 			this.alto = ALTO_DEL_TUBO;
 			this.abertura = ABERTURA_VERTICAL_ENTRE_TUBOS;
+			this.imagen = Herramientas.cargarImagen("tubo.png");
 		}
-		
-		this.imagen = imagen;
 	}
 	
 	public void dibujar(Entorno e) {
@@ -60,20 +61,19 @@ public class Obstaculo {
 		if ( esSuelo ) {
 			return false;
 		}
-		double[] pajaro = bird.damePajaro();
+		double[] pajaro = bird.damePosiciones();
 		double bordeDerecho = (x+ancho/2);
 		double bordeIzquierdo = (x-ancho/2);
 		double bordeSuperiorDeTuboInferior = (y-alto/2);
 		double bordeInferiorDeTuboSuperior = (y-abertura+alto/2);
-		if((pajaro[0]<=bordeDerecho && pajaro[0]>=bordeIzquierdo && pajaro[1]>=bordeSuperiorDeTuboInferior) 
-		|| (pajaro[0]<=bordeDerecho && pajaro[0]>=bordeIzquierdo && pajaro[1]<=(bordeInferiorDeTuboSuperior))) { 
+		if((pajaro[0] <= bordeDerecho && pajaro[0] >= bordeIzquierdo && pajaro[1] >= bordeSuperiorDeTuboInferior) 
+		|| (pajaro[0] <= bordeDerecho && pajaro[0] >= bordeIzquierdo && pajaro[1] <= (bordeInferiorDeTuboSuperior))) { 
 			return true;
 		}
 		return false;
 	}
 	
-	public double[] dameObstaculo() {
-		double[] arrayPosicionDeObstaculo = {x, y, ancho, alto, abertura};
-		return arrayPosicionDeObstaculo;
+	public double[] damePosiciones() {
+		return new double[] {x, y, ancho, alto};
 	}
 }

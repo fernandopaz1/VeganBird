@@ -46,7 +46,7 @@ public class Comida {
 	}
 	
 	public void recibeDisparo(Disparo shot) {
-		double[] disparo = shot.dameDisparo();
+		double[] disparo = shot.damePosiciones();
 		double der = (x+ancho/2);
 		double izq = (x-ancho/2);
 		double arriba = (y-alto/2);
@@ -59,7 +59,7 @@ public class Comida {
 	}
 	
 	public int damePuntaje() {
-		if(x<0) {
+		if (x < 0) {
 			return 0;
 		}
 		if (!this.verdura) {
@@ -68,8 +68,7 @@ public class Comida {
 		return this.convertida ? 3 : 5;
 	}
 
-	public double[] dameComida() {
-		double[] arrayPosicionDeComida= {x,y,ancho,alto};
-		return arrayPosicionDeComida;
+	public double[] damePosiciones() {
+		return new double[] {x, y, ancho, alto};
 	}
 }
