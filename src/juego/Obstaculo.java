@@ -10,7 +10,7 @@ public class Obstaculo {
 	private static final int ANCHO_DEL_TUBO = 75;
 	private static final int ALTO_DEL_SUELO = 250;
 	private static final int ANCHO_DEL_SUELO = 800;
-	private static final int ABERTURA_VERTICAL_ETRE_TUBOS = 650;
+	private static final int ABERTURA_VERTICAL_ENTRE_TUBOS = 650;
 	private static final int AMPLITUD_DE_MOVIMIENTO_VERTICAL = 40;
 	private static final int FRECUENCIA_DE_MOVIMIENTO_VERTICAL = 100;
 	private double x;
@@ -34,7 +34,7 @@ public class Obstaculo {
 		}else {
 			this.ancho = ANCHO_DEL_TUBO;
 			this.alto = ALTO_DEL_TUBO;
-			this.abertura = ABERTURA_VERTICAL_ETRE_TUBOS;
+			this.abertura = ABERTURA_VERTICAL_ENTRE_TUBOS;
 		}
 		
 		this.imagen = imagen;
@@ -56,7 +56,22 @@ public class Obstaculo {
 		}
 	}
 	
-
+	public boolean tuboeEsChocadoPor(Pajaro bird) {
+		if ( esSuelo ) {
+			return false;
+		}
+		double[] pajaro = bird.damePajaro();
+		double bordeDerecho = (x+ancho/2);
+		double bordeIzquierdo = (x-ancho/2);
+		double bordeSuperiorDeTuboInferior = (y-alto/2);
+		double bordeInferiorDeTuboSuperior = (y-abertura+alto/2);
+		if((pajaro[0]<=bordeDerecho && pajaro[0]>=bordeIzquierdo && pajaro[1]>=bordeSuperiorDeTuboInferior) 
+		|| (pajaro[0]<=bordeDerecho && pajaro[0]>=bordeIzquierdo && pajaro[1]<=(bordeInferiorDeTuboSuperior))) { 
+			return true;
+		}
+		return false;
+	}
+	
 	public double[] dameObstaculo() {
 		double[] arrayPosicionDeObstaculo = {x, y, ancho, alto, abertura};
 		return arrayPosicionDeObstaculo;

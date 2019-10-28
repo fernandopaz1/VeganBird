@@ -10,30 +10,24 @@ public class Disparo {
 	private double ancho;
 	private double alto;
 	private double velocidad;
-	private boolean enRango;
 	private Image image;
 	
-	public Disparo(double x,double y, double velocidad) {
+	public Disparo(double x,double y) {
 		this.x = x;
 		this.y = y;
 		this.ancho = 32;
 		this.alto = 32;
-		this.velocidad = velocidad;
-		this.image = Herramientas.cargarImagen("fireball.gif");
-		this.enRango = true;
+		this.velocidad = 10;
+		this.image = Herramientas.cargarImagen("disparo.gif");
 	}
 	
 	public void dibujar(Entorno e) {
-		if (enRango) {
 			e.dibujarImagen(image, x, y, Math.PI/2, 1);
-		}
 	}
 
 	public void mover() {
-		if (enRango) {
 			x += velocidad;
 			return;
-		}
 	}
 	
 	public double[] dameDisparo() {

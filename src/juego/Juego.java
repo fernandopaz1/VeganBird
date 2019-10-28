@@ -5,7 +5,6 @@ import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Juego extends InterfaceJuego {
@@ -14,7 +13,7 @@ public class Juego extends InterfaceJuego {
 	private Image fondo;
 	private Image imagenSuelo;
 	private Image imagenTubo;
-	private Pajaro bird;
+	private Pajaro pajaro;
 	private int puntaje;
 	private Disparo[] disparo;
 	private Obstaculo[] tubo;
@@ -31,13 +30,10 @@ public class Juego extends InterfaceJuego {
 		imagenSuelo = Herramientas.cargarImagen("suelo.png");
 		imagenTubo = Herramientas.cargarImagen("tubo.png");
 		disparo = new Disparo[cantDisparos];
-		bird = new Pajaro(entorno.ancho()/4, entorno.alto()/2);
+		pajaro = new Pajaro(entorno.ancho()/4, entorno.alto()/2);
 		puntaje = 0;
 		tubo = new Obstaculo[3];
 		
-		//Genera el randomBoolean para saber si la comida es verdura o no
-	    Random randomGenerator = new Random();
-		boolean randomBoolean = randomGenerator.nextBoolean();
 		
 		for (int i = 0; i < tubo.length; i++) {
 			tubo[i] = new Obstaculo( (3+i)*(entorno.ancho()+75)/3, entorno.alto(), false, imagenTubo);
@@ -52,7 +48,7 @@ public class Juego extends InterfaceJuego {
 		for (int i = 0; i < comida.length; i++) {
 			int randomNum = ThreadLocalRandom.current().nextInt(300,400);
 			int largo = comida.length;
-			comida[i] = new Comida(entorno.ancho()*(largo+1+i)/largo, randomNum, randomBoolean);
+			comida[i] = new Comida(entorno.ancho()*(largo+1+i)/largo, randomNum);
 			}
 		
 		entorno.iniciar();
@@ -79,9 +75,7 @@ public class Juego extends InterfaceJuego {
 		for(int i=0;i<comida.length;i++) {
 			if(comida[i]==null) {
 				int randomY = ThreadLocalRandom.current().nextInt(220,320);
-				Random randomGenerator = new Random();
-				boolean verduraOHamburgesa = randomGenerator.nextBoolean();
-				comida[i] = new Comida(entorno.ancho()+entorno.ancho()/4, randomY, verduraOHamburgesa);
+				comida[i] = new Comida(entorno.ancho()+entorno.ancho()/4, randomY);
 				return;
 			}
 		}
@@ -113,7 +107,7 @@ public class Juego extends InterfaceJuego {
 		entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0);
 		
 		
-		if (bird != null) {
+		if (pajaro != null) {
 			/*
 			 *********************************************
 			 *
@@ -130,8 +124,8 @@ public class Juego extends InterfaceJuego {
 							comida[i].recibeDisparo(disparo[j]);
 						}
 					}
-					if (bird.seComioLaComida(comida[i]) || comidaFueraDeJuego(comida[i])) {
-						puntaje  += comida[i].damePuntaje(puntaje);
+					if (pajaro.seComioLaComida(comida[i]) || comidaFueraDeJuego(comida[i])) {
+						puntaje  += comida[i].damePuntaje();
 						comida[i] = null;
 					}
 				}
@@ -199,30 +193,30 @@ public class Juego extends InterfaceJuego {
 		 * 
 		 * ******************************************
 		 */
-		if (bird != null) {
-			bird.dibujar(entorno);
-			bird.caer();
+		if (pajaro != null) {
+			pajaro.dibujar(entorno);
+			pajaro.caer();
 			if (entorno.sePresiono(entorno.TECLA_ARRIBA)) {
-				bird.subir();
+				pajaro.subir();
 			}
 			
 			for (int k = 0 ; k < cantDisparos; k++) {	
 				if (entorno.sePresiono(entorno.TECLA_ESPACIO) && disparo[k] == null) {		
-						disparo[k] = bird.disparar();
+						disparo[k] = pajaro.disparar();
 						break;
 				}
 			}
 			for(int i = 0 ; i<tubo.length ; i++) {
-				if (tubo[i] != null && bird!=null) {
-					if (bird.chocaConElTubo(tubo[i])) {
-						bird = null;
+				if (tubo[i] != null && pajaro!=null) {
+					if (pajaro.chocaConElTubo(tubo[i])) {
+						pajaro = null;
 					}
 				}
 			}
 			for(int j = 0 ; j<suelo.length ; j++) {	
-				if (suelo[j] != null && bird!=null) {
-					if (bird.tocaSuelo(suelo[j]) || bird.tocaTecho(entorno)) {
-						bird = null;
+				if (suelo[j] != null && pajaro!=null) {
+					if (pajaro.tocaSuelo(suelo[j]) || pajaro.tocaTecho()) {
+						pajaro = null;
 					}
 				}
 			}
@@ -260,14 +254,14 @@ public class Juego extends InterfaceJuego {
 		 * ******************************************
 		 */
 				
-		if (bird == null) {
+		if (pajaro == null) {
 			fondo = Herramientas.cargarImagen("end.gif");
 			entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0);
 			if (vida > 0) {
 				entorno.cambiarFont("monospaced", 20, Color.WHITE);
 				entorno.escribirTexto("Tenes otra vida, apreta ENTER para continuar", entorno.ancho()/2-260, entorno.alto()/2+170);
 				if (entorno.sePresiono(entorno.TECLA_ENTER)){
-					bird = new Pajaro(entorno.ancho()/4, entorno.alto()/2);
+					pajaro = new Pajaro(entorno.ancho()/4, entorno.alto()/2);
 					fondo = Herramientas.cargarImagen("fondo.jpg");
 					puntaje = 0;
 					vida--;

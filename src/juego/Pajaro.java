@@ -40,7 +40,7 @@ public class Pajaro {
 	
 	
 	public Disparo disparar() {
-		return new Disparo(x, y, 10);
+		return new Disparo(x, y);
 	}
 	
 	public boolean tocaSuelo(Obstaculo suelo) {
@@ -48,21 +48,12 @@ public class Pajaro {
 		return this.y > (ground[1]-ground[3]/4) ? true: false;
 	}
 	
-	public boolean tocaTecho(Entorno e) {
+	public boolean tocaTecho() {
 		return this.y < 0 ? true: false;
 	}
 				
 	public boolean chocaConElTubo(Obstaculo tubo) {
-		double[] obstaculo = tubo.dameObstaculo();
-		double bordeDerecho = (obstaculo[0]+obstaculo[2]/2);
-		double bordeIzquierdo = (obstaculo[0]-obstaculo[2]/2);
-		double bordeSuperiorDeTuboInferior = (obstaculo[1]-obstaculo[3]/2);
-		double bordeInferiorDeTuboSuperior = (obstaculo[1]-obstaculo[4]+obstaculo[3]/2);
-		if((x<=bordeDerecho && x>=bordeIzquierdo && y>=bordeSuperiorDeTuboInferior) 
-		|| (x<=bordeDerecho && x>=bordeIzquierdo && y<=(bordeInferiorDeTuboSuperior))) { 
-			return true;
-		}
-		return false;
+		return tubo.tuboeEsChocadoPor(this);
 	}
 	
 	public boolean seComioLaComida(Comida comida) {

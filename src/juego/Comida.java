@@ -6,6 +6,10 @@ import entorno.Entorno;
 import entorno.Herramientas;
 
 public class Comida {
+	private static final int AMPLITUD_OSCILACION_HAMBURGUESA = 40;
+	private static final int AMPLITUD_OSCILACION_VERDURA = 20;
+	private static final int FRECUENCIA_OSCILACION_HAMBURGUESA = 20;
+	private static final int FRECUENCIA_OSCILACION_VERDURA = 100;
 	private static final int VELOCIDAD = 1;
 	private double x;
 	private double y;
@@ -19,7 +23,7 @@ public class Comida {
     Random randomGenerator = new Random();
 	boolean randomBoolean = randomGenerator.nextBoolean();
 	
-	public Comida(double x, double y, boolean verdura) {
+	public Comida(double x, double y) {
 		this.x = x;
 		this.y = y;
 		this.ancho = 20;
@@ -35,16 +39,10 @@ public class Comida {
 	}
 	
 	public void mover() {
-		double f = this.verdura ? 100 : 20;
-		double a = this.verdura ? 20 : 40;
+		double f = this.verdura ? FRECUENCIA_OSCILACION_VERDURA : FRECUENCIA_OSCILACION_HAMBURGUESA;
+		double a = this.verdura ? AMPLITUD_OSCILACION_VERDURA : AMPLITUD_OSCILACION_HAMBURGUESA;
 		x -= velocidad;
 		y += a*Math.sin(x/f)/f;
-	}
-	
-	
-	public double[] dameComida() {
-		double[] arrayPosicionDeComida= {x,y,ancho,alto};
-		return arrayPosicionDeComida;
 	}
 	
 	public void recibeDisparo(Disparo shot) {
@@ -60,14 +58,18 @@ public class Comida {
 		}
 	}
 	
-	public int damePuntaje(int p) {
+	public int damePuntaje() {
 		if(x<0) {
 			return 0;
 		}
 		if (!this.verdura) {
-			p -= 5;
-			return p;
+			return -5;
 		}
 		return this.convertida ? 3 : 5;
+	}
+
+	public double[] dameComida() {
+		double[] arrayPosicionDeComida= {x,y,ancho,alto};
+		return arrayPosicionDeComida;
 	}
 }
