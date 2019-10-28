@@ -90,7 +90,6 @@ public class Juego extends InterfaceJuego {
 	public static void crearSuelo(Entorno entorno,Obstaculo[] obstaculo,Image imagenSuelo) {
 			for (int i = 0; i < obstaculo.length; i++) {
 				if(obstaculo[i]==null) {
-					System.out.println("Suelo");
 					obstaculo[i] = new Obstaculo(entorno.ancho()+800, entorno.alto(), true, imagenSuelo);					
 					return;
 				}
